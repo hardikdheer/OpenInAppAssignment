@@ -1,7 +1,7 @@
 const cron = require('node-cron');
 const Task = require('../models/Task');
 const User = require('../models/User');
-const { client, phoneNumber } = require('../config/twilioConfig');
+const { client,phoneNumber } = require('../config/twilioconfig.js');
 
 const callUsersWithOverdueTasks = async () => {
     console.log('Running Overdue Task Caller Job');
@@ -20,7 +20,7 @@ const callUsersWithOverdueTasks = async () => {
             await client.calls.create({
                 to: user.phone_number,
                 from: phoneNumber,
-                url: 'http://twimlets.com/holdmusic?Bucket=com.twilio.music.ambient'
+                url: 'https://api.twilio.com/cowbell.mp3'
             });
             console.log(`Call initiated to ${user.phone_number}`);
         } catch (error) {
@@ -29,5 +29,5 @@ const callUsersWithOverdueTasks = async () => {
     }
 };
 
-// Example: Schedule the job to run at 9 AM every day
+// Schedule the job to run at 9 AM every day
 cron.schedule('0 9 * * *', callUsersWithOverdueTasks);

@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     phone_number: { type: String,  },
-    priority: { type: Number, enum: [0, 1, 2] },
+    priority: { type: Number,required:true, },
 }, { timestamps: true });
 
 // Hash password 

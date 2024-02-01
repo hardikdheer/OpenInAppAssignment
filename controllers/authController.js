@@ -4,12 +4,12 @@ const jwt = require('jsonwebtoken');
 
 exports.registerUser = async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { username, password,priority } = req.body;
         let user = await User.findOne({ username });
         if (user) {
             return res.status(400).json({ msg: 'User already exists' });
         }
-        user = new User({ username, password });
+        user = new User({ username, password,priority });
         await user.save();
 
         const payload = {

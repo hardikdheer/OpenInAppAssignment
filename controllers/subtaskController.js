@@ -43,3 +43,18 @@ exports.updateSubTask = async (req, res) => {
         res.status(500).send('Server error');
     }
 };
+
+exports.getAllSubTasks = async (req, res) => {
+    const { task_id } = req.query;
+    let query = {};
+
+    if (task_id) query.task_id = task_id;
+
+    try {
+        const subTasks = await SubTask.find(query);
+        res.json(subTasks);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+    }
+};

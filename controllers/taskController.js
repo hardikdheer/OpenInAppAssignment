@@ -40,3 +40,34 @@ exports.updateTask = async (req, res) => {
         res.status(500).send('Server error');
     }
 };
+
+exports.getAllTasks = async (req, res) => {
+    const { priority, due_date } = req.query;
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const skip = (page - 1) * limit;
+
+    let query = { userId: req.user.userId };
+
+    if (priority) query.priority = priority;
+    if (due_date) {
+        const date = new Date(due_date);
+        date.setHours(0, 0, 0, 0);
+        query.due_date = { $gte: date };
+    }
+
+    try {
+        const tasks = await Task.find(query).skip(skip).limit(limit);
+        const total = await Task.countDocuments(query);
+
+        res.json({
+            tasks,
+            count: tasks.length,
+            page,
+            pages: Math.ceil(total / limit)
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+    }
+};
